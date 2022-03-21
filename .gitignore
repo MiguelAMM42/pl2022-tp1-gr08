@@ -131,3 +131,6 @@ dmypy.json
 
 # Ignore .html generated
 *.html
+
+# Ignore some .txt used for debugging
+*.txt

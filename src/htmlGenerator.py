@@ -12,18 +12,10 @@ queries_lst = ['Datas extermas dos registos no dataset',
 def htmlMAIN():
     doc = dominate.document(title='TP1_PL_EMD')
 
-    ##with doc.head:
-    ##    link(rel='stylesheet', href='style.css')
-    ##    script(type='text/javascript', src='script.js')
-
     with doc:
         with div(id='header').add(ol()):
             for i in queries_lst:
                 li(a(i.title(), href='../out/%s.html' % i))
-
-        ##with div():
-        ##    attr(cls='body')
-        ##    p('Lorem ipsum..')
 
     return doc
 
@@ -32,3 +24,15 @@ doc = htmlMAIN()
 f = open("../out/index.html", "w")
 f.write(doc.render())
 f.close()
+
+
+
+def distByAddressHTML(dist):
+    doc = dominate.document(title='distByAddress')
+
+    with doc:
+        with div(id='header').add(ol()):
+            for sport in dist.keys():
+                li(a(sport.title(), href='../out/%s.html' % sport))
+
+    return doc
