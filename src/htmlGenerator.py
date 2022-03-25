@@ -32,7 +32,7 @@ def distByAddressHTML(dist):
 
     with doc:
         with div(id='header').add(ol()):
-            for sport in dist.keys():
-                li(a(sport.title(), href='../out/%s.html' % sport))
+            for addr in dist.keys():
+                li(a(addr.title(), href='../out/queryE/%s.html' % addr))
 
     return doc

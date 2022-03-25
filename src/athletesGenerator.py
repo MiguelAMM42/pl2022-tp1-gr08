@@ -20,7 +20,7 @@ def athletesGenerator(athletes):
             ##    p('Lorem ipsum..')
 
 
-        fileName = "../out/athletes/" + unicodedata.normalize('NFD', a['nome_primeiro']).encode('ascii', 'ignore').decode("utf-8") + "_" + unicodedata.normalize('NFD', a['nome_ultimo']).encode('ascii', 'ignore').decode("utf-8") + ".html"
+        fileName = "../out/athletes/" + a['_id'] + ".html"
 
         f = open(fileName, "w")
         f.write(doc.render())
