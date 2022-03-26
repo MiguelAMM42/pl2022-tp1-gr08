@@ -7,6 +7,7 @@ import re
 
 
 #(a) Datas externas dos registos no dataset
+#sorted por date e por nome
 def distByDates(athletes):
     dist = {}
     for a in athletes:
@@ -15,7 +16,18 @@ def distByDates(athletes):
         else:
             dist[a['dataEMD']] = [a]
 
+    dist = distByDatesSorted(dist)
     return dist
+
+def distByDatesSorted(dist):
+    sorted_key_tuple = sorted(dist.items())
+    sorted_dist = dict(sorted_key_tuple)
+    
+    for date in sorted_dist:
+        sorted_dist[date]= sorted(sorted_dist[date], key = lambda i: i['nome_primeiro'])
+    
+    return sorted_dist
+    
 
 
 #(b) Distribuição por género em cada ano e no total
@@ -208,6 +220,7 @@ def distByAdressSorted(dist):
 
 
 #(f) Distribuição por estatuto de federado em cada ano
+#sorted por ano, true primeiro e nome
 def distByYearAndFederated(athletes):
     dist = {}
     distStats = {}
@@ -225,6 +238,8 @@ def distByYearAndFederated(athletes):
         else:
             dist.update({year:{federated:[a]}})
             distStats.update({year:{federated:1}})
+            
+    dist = distByYearAndFederatedSorted(dist)
 
     for year in distStats:
         distStats[year]['true'] = distStats[year]['true'] * 100 / (distStats[year]['true'] + distStats[year]['false'])
@@ -232,8 +247,22 @@ def distByYearAndFederated(athletes):
 
     return (dist,distStats)
 
+def distByYearAndFederatedSorted(dist):
+    sorted_key_tuple = sorted(dist.items())
+    sorted_dist = dict(sorted_key_tuple)
+    
+    for year in sorted_dist:
+        sorted_flag_tuple = sorted(sorted_dist[year].items(), reverse=True)
+        sorted_dist[year] = dict(sorted_flag_tuple)
+        for federated in sorted_dist[year]:
+            sorted_dist[year][federated] = sorted(sorted_dist[year][federated], key = lambda i: i['nome_primeiro'])
+    return sorted_dist
+    
+    
+
 
 #(g) Percentagem de aptos e não aptos por ano
+#sorted por ano, true primeiro e nome
 def distByYearAndSuitable(athletes):
     dist = {}
     distStats = {}
@@ -256,4 +285,18 @@ def distByYearAndSuitable(athletes):
         distStats[year]['true'] = distStats[year]['true'] * 100 / (distStats[year]['true'] + distStats[year]['false'])
         distStats[year]['false'] = 100 - distStats[year]['true']
 
+    dist = distByYearAndSuitableSorted(dist)
+
     return (dist, distStats)
+
+
+def distByYearAndSuitableSorted(dist):
+    sorted_key_tuple = sorted(dist.items())
+    sorted_dist = dict(sorted_key_tuple)
+    
+    for year in sorted_dist:
+        sorted_flag_tuple = sorted(sorted_dist[year].items(), reverse=True)
+        sorted_dist[year] = dict(sorted_flag_tuple)
+        for suitable in sorted_dist[year]:
+            sorted_dist[year][suitable] = sorted(sorted_dist[year][suitable], key = lambda i: i['nome_primeiro'])
+    return sorted_dist
