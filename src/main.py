@@ -4,26 +4,10 @@ from queries import *
 from htmlGenerator import *
 
 def main(csvFile):
-    content = reader(csvFile)
-    #print(content)
-
-    dist = distByAddress(content)
+    athletes = reader(csvFile)
+    #HTMLsGenerator(athletes)
+    dist = distByAddress(athletes)
     print(dist)
-
-
-    #print(content)
-    #athletesGenerator(content)
-    #dist = distByAddress(content)
-    #print(dist)
-    #distByAddressHTML(dist)
-
-    #dist2 = distByDates(content) 
-    #distByDatesHTML(dist2)
-
-    #dist3 = distByYearAndGender(content)
-    #distByYearAndGender(dist3)
-
-    #htmlMAIN()
     
     
 

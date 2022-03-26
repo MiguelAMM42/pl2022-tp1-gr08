@@ -1,6 +1,8 @@
 import dominate
 from dominate.tags import *
+from queries import *
 import unicodedata
+import os
 
 #Code to generate HTML file for each athlete
 def athletesGenerator(athletes):
@@ -73,44 +75,179 @@ def distByDatesHTML(dist):
     f.close()
 
 #(b) Distribuição por género em cada ano e no total --- HTML
-def distByYearAndGenderHTML(dist):
+def distByYearAndGenderHTML(dist,distStats):
+    #Code to generate a folder for each year
+    for year in dist.keys():
+        yearPath = '../out/queryB/' + year
+        if not os.path.exists(yearPath):
+            os.makedirs(yearPath)
 
-    #HTML doc for each gender
-    for gender in dist.keys():
-        if gender == 'F':
-            titleGender = 'feminino'
-        else:
-            titleGender = 'masculino' 
-        doc = dominate.document(title=titleGender)
+    
+    #Code to generate HTML doc for each gender in each year
+    for year in dist.keys():
+        for gender in dist[year].keys():
+            if gender == 'F':
+                genderTitle = 'feminino'
+            else:
+                genderTitle = 'masculino'
+            doc = dominate.document(title=gender)
+
+            with doc:
+                with div(id='header').add(ol()):
+                    for athlete in dist[year][gender]:
+                        li(a(athlete['nome_primeiro'] + " " + athlete['nome_ultimo'], href='../../athletes/%s.html' % athlete['_id']))
+
+            f = open("../out/queryB/%s/%s.html" % (year,genderTitle), "w")
+            f.write(doc.render())
+            f.close()
+            
+        
+
+    #Code to generate HTML doc for each year
+    for year in dist.keys():
+
+        doc = dominate.document(title=year)
 
         with doc:
             with div(id='header').add(ol()):
-                for year in dist[gender].keys():
-                    li(a(year.title(), href='../queryA/%s/years/%s.html' % (genderTitle,year) ))
+                for gender in dist[year].keys():
+                    if gender == 'F':
+                        genderTitle = 'feminino'
+                    else:
+                        genderTitle = 'masculino'
+                    li(a(genderTitle, href='../%s/%s.html' % (year,genderTitle) ))
 
-        f = open("../out/queryA/%s/%s.html" % (genderTitle,genderTitle), "w")
+        f = open("../out/queryB/%s/%s.html" % (year,year), "w")
         f.write(doc.render())
         f.close()
 
+    
     #main HTML doc of the query
     doc = dominate.document(title='Distribuição por género em cada ano e no total')
 
     with doc:
         with div(id='header').add(ol()):
-            for gender in dist.keys():
-                if gender == 'F':
-                    titleGender = 'feminino'
-                else:
-                    titleGender = 'masculino' 
-                li(a(genderTitle, href='../queryB/%s/%s.html' % (genderTitle,genderTitle)))
+            for year in dist.keys():
+                li(a(year, href='../queryB/%s/%s.html' % (year,year)))
 
     f = open("../out/queryB/queryB.html", "w")
     f.write(doc.render())
     f.close()
 
 
+
+#(c) Distribuição por modalidade em cada ano e no total --- HTML
+def distByYearAndSportHTML(dist,distStats):
+    #Code to generate a folder for each year
+    for year in dist.keys():
+        yearPath = '../out/queryC/' + year
+        if not os.path.exists(yearPath):
+            os.makedirs(yearPath)
+
+    
+    #Code to generate HTML doc for each sport in each year
+    for year in dist.keys():
+        for sport in dist[year].keys():
+            doc = dominate.document(title=sport)
+
+            with doc:
+                with div(id='header').add(ol()):
+                    for athlete in dist[year][sport]:
+                        li(a(athlete['nome_primeiro'] + " " + athlete['nome_ultimo'], href='../../athletes/%s.html' % athlete['_id']))
+
+            f = open("../out/queryC/%s/%s.html" % (year, sport), "w")
+            f.write(doc.render())
+            f.close()
+            
+        
+
+    #Code to generate HTML doc for each year
+    for year in dist.keys():
+
+        doc = dominate.document(title=year)
+
+        with doc:
+            with div(id='header').add(ol()):
+                for sport in dist[year].keys():
+                    li(a(sport, href='../%s/%s.html' % (year,sport) ))
+
+        f = open("../out/queryC/%s/%s.html" % (year,year), "w")
+        f.write(doc.render())
+        f.close()
+
+    
+    #main HTML doc of the query
+    doc = dominate.document(title='Distribuição por modalidade em cada ano e no total')
+
+    with doc:
+        with div(id='header').add(ol()):
+            for year in dist.keys():
+                li(a(year, href='../queryC/%s/%s.html' % (year,year)))
+
+    f = open("../out/queryC/queryC.html", "w")
+    f.write(doc.render())
+    f.close()
+
+
+#(d) Distribuição por idade e género (para a idade, considerar apenas 2 escalões: < 35 anos e >= 35) --- HTML
+def distByAgeAndGenderHTML(dist,distStats):
+    #Code to generate a folder for each age interval
+    for age in dist.keys():
+        agePath = '../out/queryD/' + age
+        if not os.path.exists(agePath):
+            os.makedirs(agePath)
+
+    
+    #Code to generate HTML doc for each gender in each age interval
+    for age in dist.keys():
+        for gender in dist[age].keys():
+            doc = dominate.document(title=gender)
+
+            with doc:
+                with div(id='header').add(ol()):
+                    for athlete in dist[age][gender]:
+                        li(a(athlete['nome_primeiro'] + " " + athlete['nome_ultimo'], href='../../athletes/%s.html' % athlete['_id']))
+
+            f = open("../out/queryD/%s/%s.html" % (age, gender), "w")
+            f.write(doc.render())
+            f.close()
+            
+        
+
+    #Code to generate HTML doc for each year
+    for age in dist.keys():
+
+        doc = dominate.document(title=age)
+
+        with doc:
+            with div(id='header').add(ol()):
+                for gender in dist[age].keys():
+                    li(a(gender, href='../%s/%s.html' % (age,gender) ))
+
+        f = open("../out/queryD/%s/%s.html" % (age,age), "w")
+        f.write(doc.render())
+        f.close()
+
+    
+    #main HTML doc of the query
+    doc = dominate.document(title='Distribuição por idade e género')
+
+    with doc:
+        with div(id='header').add(ol()):
+            for year in dist.keys():
+                li(a(year, href='../queryD/%s/%s.html' % (year,year)))
+
+    f = open("../out/queryD/queryD.html", "w")
+    f.write(doc.render())
+    f.close()
+
+
 #(e) Distribuição por morada --- HTML
 def distByAddressHTML(dist):
+    #Code to generate a folder dor the addresses
+    addrPath = '../out/queryE/addresses'
+    if not os.path.exists(addrPath):
+        os.makedirs(addrPath)
 
     #HTML doc for each address
     for addr in dist.keys():
@@ -138,3 +275,137 @@ def distByAddressHTML(dist):
     f = open("../out/queryE/queryE.html", "w")
     f.write(doc.render())
     f.close()
+
+
+#(f) Distribuição por estatuto de federado em cada ano --- HTML
+def distByYearAndFederatedHTML(dist):
+    #Code to generate a folder for each year
+    for year in dist.keys():
+        yearPath = '../out/queryF/' + year
+        if not os.path.exists(yearPath):
+            os.makedirs(yearPath)
+
+    
+    #Code to generate HTML doc for each state in each year
+    for year in dist.keys():
+        for federated in dist[year].keys():
+            doc = dominate.document(title=federated)
+
+            with doc:
+                with div(id='header').add(ol()):
+                    for athlete in dist[year][federated]:
+                        li(a(athlete['nome_primeiro'] + " " + athlete['nome_ultimo'], href='../../athletes/%s.html' % athlete['_id']))
+
+            f = open("../out/queryF/%s/%s.html" % (year, federated), "w")
+            f.write(doc.render())
+            f.close()
+            
+        
+
+    #Code to generate HTML doc for each year
+    for year in dist.keys():
+
+        doc = dominate.document(title=year)
+
+        with doc:
+            with div(id='header').add(ol()):
+                for federated in dist[year].keys():
+                    li(a(federated, href='../%s/%s.html' % (year,federated) ))
+
+        f = open("../out/queryF/%s/%s.html" % (year,year), "w")
+        f.write(doc.render())
+        f.close()
+
+    
+    #main HTML doc of the query
+    doc = dominate.document(title='Distribuição por estatuto de federado em cada ano')
+
+    with doc:
+        with div(id='header').add(ol()):
+            for year in dist.keys():
+                li(a(year, href='../queryF/%s/%s.html' % (year,year)))
+
+    f = open("../out/queryF/queryF.html", "w")
+    f.write(doc.render())
+    f.close()
+
+
+
+#(g) Percentagem de aptos e não aptos por ano --- HTML
+def distByYearAndSuitableHTML(dist):
+    #Code to generate a folder for each year
+    for year in dist.keys():
+        yearPath = '../out/queryG/' + year
+        if not os.path.exists(yearPath):
+            os.makedirs(yearPath)
+
+    
+    #Code to generate HTML doc for each result in each year
+    for year in dist.keys():
+        for suitable in dist[year].keys():
+            doc = dominate.document(title=suitable)
+
+            with doc:
+                with div(id='header').add(ol()):
+                    for athlete in dist[year][suitable]:
+                        li(a(athlete['nome_primeiro'] + " " + athlete['nome_ultimo'], href='../../athletes/%s.html' % athlete['_id']))
+
+            f = open("../out/queryG/%s/%s.html" % (year, suitable), "w")
+            f.write(doc.render())
+            f.close()
+            
+        
+
+    #Code to generate HTML doc for each year
+    for year in dist.keys():
+
+        doc = dominate.document(title=year)
+
+        with doc:
+            with div(id='header').add(ol()):
+                for suitable in dist[year].keys():
+                    li(a(suitable, href='../%s/%s.html' % (year,suitable) ))
+
+        f = open("../out/queryG/%s/%s.html" % (year,year), "w")
+        f.write(doc.render())
+        f.close()
+
+    
+    #main HTML doc of the query
+    doc = dominate.document(title='Distribuição por estatuto de federado em cada ano')
+
+    with doc:
+        with div(id='header').add(ol()):
+            for year in dist.keys():
+                li(a(year, href='../queryG/%s/%s.html' % (year,year)))
+
+    f = open("../out/queryG/queryG.html", "w")
+    f.write(doc.render())
+    f.close()
+
+
+def HTMLsGenerator(athletes):
+    athletesGenerator(athletes)
+    htmlMAIN()
+
+    #a
+    distA = distByDates(athletes)
+    distByDatesHTML(distA)
+    #b
+    distB,distStatsB = distByYearAndGender(athletes)
+    distByYearAndGenderHTML(distB,distStatsB)
+    #c
+    distC, distStatsC = distByYearAndSport(athletes)
+    distByYearAndSportHTML(distC,distStatsC)
+    #d
+    distD,distStatsD = distByAgeAndGender(athletes)
+    distByAgeAndGenderHTML(distD,distStatsD)
+    #e
+    distE = distByAddress(athletes)
+    distByAddressHTML(distE)
+    #f
+    distF = distByYearAndFederated(athletes)
+    distByYearAndFederatedHTML(distF)
+    #g
+    distG = distByYearAndSuitable(athletes)
+    distByYearAndSuitableHTML(distG)
