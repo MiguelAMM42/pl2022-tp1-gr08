@@ -7,13 +7,25 @@ from htmlGenerator import *
 def main(csvFile):
     content = reader(csvFile)
     #print(content)
-    athletesGenerator(content)
-    dist = distByAddress(content)
+
+    dist = distByYearAndSport(content)
     print(dist)
-    doc = distByAddressHTML(dist)
-    f = open("../out/index.html", "w")
-    f.write(doc.render())
-    f.close()
+
+
+    #print(content)
+    #athletesGenerator(content)
+    #dist = distByAddress(content)
+    #print(dist)
+    #distByAddressHTML(dist)
+
+    #dist2 = distByDates(content) 
+    #distByDatesHTML(dist2)
+
+    #dist3 = distByYearAndGender(content)
+    #distByYearAndGender(dist3)
+
+    #htmlMAIN()
+    
     
 
 if __name__== "__main__":

@@ -4,7 +4,7 @@ import re
 #FALTA ADICIONAR ESTATISTICAS
 #DESTE MODO AS FUNÇOES IRÃO RETORNAR TUPLOS
 
-#(a) Datas extermas dos registos no dataset
+#(a) Datas externas dos registos no dataset
 def distByDates(athletes):
     dist = {}
     for a in athletes:
@@ -18,20 +18,19 @@ def distByDates(athletes):
 
 #(b) Distribuição por género em cada ano e no total
 def distByYearAndGender(athletes):
-    dist = {'F':{},'M':{}}
+    dist = {}
     for a in athletes:
         dataEMD = re.search(r'(\d{4})\-\d{2}\-\d{2}', a['dataEMD'])
-        ano = dataEMD.group(1)
-        if a['genero'] == 'F':
-            if ano in dist['F']:
-                dist['F'][ano].append(a)
+        year = dataEMD.group(1)
+        gender = a['genero']
+        if year in dist:
+            if gender in dist[year]:
+                dist[year][gender].append(a)
             else:
-                dist['F'][ano] = [a]
+                dist[year][gender] = [a]
         else:
-            if ano in dist['M']:
-                dist['M'][ano].append(a)
-            else:
-                dist['M'][ano] = [a]
+            dist.update({year:{gender:[a]}})
+            
 
     return dist
 
@@ -40,28 +39,34 @@ def distByYearAndGender(athletes):
 def distByYearAndSport(athletes):
     dist = {}
     for a in athletes:
-        if a['morada'] in dist:
-            dist[a['morada']].append(a)
+        dataEMD = re.search(r'(\d{4})\-\d{2}\-\d{2}', a['dataEMD'])
+        year = dataEMD.group(1)
+        sport = a['modalidade']
+        if year in dist:
+            if sport in dist[year]:
+                dist[year][sport].append(a)
+            else:
+                dist[year][sport] = [a]
         else:
-            dist[a['morada']] = [a]
+            dist.update({year:{sport:[a]}})
 
     return dist
 
 
 #(d) Distribuição por idade e género (para a idade, considerar apenas 2 escalões: < 35 anos e >= 35)
 def distByAgeAndGender(athletes):
-    dist = {'F':{'menor35':[], 'maiorIgual35':[]}, 'M':{'menor35':[], 'maiorIgual35':[]}}
+    dist = {'menor35':{'F':[], 'M':[]}, 'maiorIgual35':{'F':[], 'M':[]}}
     for a in athletes:
-        if a['genero'] == 'F':
-            if int(a['idade']) < 35:
-                dist['F']['menor35'].append(a)
+        if int(a['idade']) < 35:
+            if a['genero'] == 'F':
+                dist['menor35']['F'].append(a)
             else:
-                dist['F']['maiorIgual35'].append(a)
+                dist['menor35']['M'].append(a)
         else:
-            if int(a['idade']) < 35:
-                dist['M']['menor35'].append(a)
+            if a['genero'] == 'F':
+                dist['maiorIgual35']['F'].append(a)
             else:
-                dist['M']['maiorIgual35'].append(a)
+                dist['maiorIgual35']['M'].append(a)
 
     return dist
 
@@ -80,39 +85,35 @@ def distByAddress(athletes):
 
 #(f) Distribuição por estatuto de federado em cada ano
 def distByYearAndFederated(athletes):
-    dist = {'federado':{},'naoFederado':{}}
+    dist = {}
     for a in athletes:
         dataEMD = re.search(r'(\d{4})\-\d{2}\-\d{2}', a['dataEMD'])
-        ano = dataEMD.group(1)
-        if a['federado'] == 'true':
-            if ano in dist['federado']:
-                dist['federado'][ano].append(a)
+        year = dataEMD.group(1)
+        federated = a['federado']
+        if year in dist:
+            if federated in dist[year]:
+                dist[year][federated].append(a)
             else:
-                dist['federado'][ano] = [a]
+                dist[year][federated] = [a]
         else:
-            if ano in dist['naoFederado']:
-                dist['naoFederado'][ano].append(a)
-            else:
-                dist['naoFederado'][ano] = [a]
+            dist.update({year:{federated:[a]}})
 
     return dist
 
 
 #(g) Percentagem de aptos e não aptos por ano
 def distByYearAndSuitable(athletes):
-    dist = {'apto':{},'naoApto':{}}
+    dist = {}
     for a in athletes:
         dataEMD = re.search(r'(\d{4})\-\d{2}\-\d{2}', a['dataEMD'])
-        ano = dataEMD.group(1)
-        if a['resultado'] == 'true':
-            if ano in dist['apto']:
-                dist['apto'][ano].append(a)
+        year = dataEMD.group(1)
+        suitable = a['resultado']
+        if year in dist:
+            if suitable in dist[year]:
+                dist[year][suitable].append(a)
             else:
-                dist['apto'][ano] = [a]
+                dist[year][suitable] = [a]
         else:
-            if ano in dist['naoApto']:
-                dist['naoApto'][ano].append(a)
-            else:
-                dist['naoApto'][ano] = [a]
+            dist.update({year:{suitable:[a]}})
 
     return dist
