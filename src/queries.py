@@ -4,6 +4,8 @@ import re
 #FALTA ADICIONAR ESTATISTICAS
 #DESTE MODO AS FUNÇOES IRÃO RETORNAR TUPLOS
 
+
+
 #(a) Datas externas dos registos no dataset
 def distByDates(athletes):
     dist = {}
@@ -17,6 +19,7 @@ def distByDates(athletes):
 
 
 #(b) Distribuição por género em cada ano e no total
+#Está sorted por ano, genero e nome_primeiro
 def distByYearAndGender(athletes):
     dist = {}
     distStats = {}
@@ -56,11 +59,27 @@ def distByYearAndGender(athletes):
 
     totaltotal = womenCounter + menCounter
     distStats.update({'total':{'F':womenCounter*100/totaltotal,'M':menCounter*100/totaltotal}})
+    
+    dist = distByYearAndGenderSorted(dist)
 
     return (dist,distStats)
 
 
+def distByYearAndGenderSorted(dist):
+    sorted_key_tuple = sorted(dist.items())
+    sorted_dist = dict(sorted_key_tuple)
+    
+    for year in sorted_dist:
+        sorted_gender_tuple = sorted(sorted_dist[year].items())
+        sorted_dist[year] = dict(sorted_gender_tuple)
+        for gender in sorted_dist[year]:
+            sorted_dist[year][gender] = sorted(sorted_dist[year][gender], key = lambda i: i['nome_primeiro'])
+    return sorted_dist
+
+
+
 #(c) Distribuição por modalidade em cada ano e no total
+#Sorted por ano, desporto e nome_primeiro
 def distByYearAndSport(athletes):
     dist = {}
     distStats = {}
@@ -91,14 +110,30 @@ def distByYearAndSport(athletes):
             total = total + distStats[year][sport]
         for sport in distStats[year]:
             distStats[year][sport] = distStats[year][sport] * 100 / total
+            
+    dist = distByYearAndSportSorted(dist)
 
     return (dist,distStats)
 
 
+def distByYearAndSportSorted(dist):
+    sorted_key_tuple = sorted(dist.items())
+    sorted_dist = dict(sorted_key_tuple)
+    
+    for year in sorted_dist:
+        sorted_gender_tuple = sorted(sorted_dist[year].items())
+        sorted_dist[year] = dict(sorted_gender_tuple)
+        for sport in sorted_dist[year]:
+            sorted_dist[year][sport] = sorted(sorted_dist[year][sport], key = lambda i: i['nome_primeiro'])
+    return sorted_dist
+    
+
+
 #(d) Distribuição por idade e género (para a idade, considerar apenas 2 escalões: < 35 anos e >= 35)
+#Está sorted por nome_primeiro
 def distByAgeAndGender(athletes):
     dist = {'menor35':{'F':[], 'M':[]}, 'maiorIgual35':{'F':[], 'M':[]}}
-    distStats = {}
+    distStats = {'menor35':{'F':0, 'M':0}, 'maiorIgual35':{'F':0, 'M':0}}
     womenCounter = 0
     menCounter = 0
     for a in athletes:
@@ -125,11 +160,21 @@ def distByAgeAndGender(athletes):
     distStats['menor35']['M'] = 100 - distStats['menor35']['F']
     distStats['maiorIgual35']['F'] = distStats['maiorIgual35']['F'] * 100 / (distStats['maiorIgual35']['F'] + distStats['maiorIgual35']['M'])
     distStats['maiorIgual35']['M'] = 100 - distStats['maiorIgual35']['F']
+    
+    dist = distByAgeAndGenderSorted(dist)
 
     return (dist,distStats)
 
+def distByAgeAndGenderSorted(dist):  
+    for age in dist:
+        for gender in dist[age]:
+            dist[age][gender] = sorted(dist[age][gender], key = lambda i: i['nome_primeiro'])
+    return dist
+    
+
 
 #(e) Distribuição por morada
+#sorted por morada e nome
 def distByAddress(athletes):
     dist = {}
     for a in athletes:
@@ -137,8 +182,20 @@ def distByAddress(athletes):
             dist[a['morada']].append(a)
         else:
             dist[a['morada']] = [a]
+        
+    dist = distByAdressSorted(dist)
 
     return dist
+
+def distByAdressSorted(dist):
+    sorted_key_tuple = sorted(dist.items())
+    sorted_dist = dict(sorted_key_tuple)
+    
+    for adress in sorted_dist:
+        sorted_dist[adress] = sorted(sorted_dist[adress], key = lambda i: i['nome_primeiro'])
+        #print(sorted(sorted_dist[adress], key = lambda i: i['index']))
+    return sorted_dist
+    
 
 
 #(f) Distribuição por estatuto de federado em cada ano

@@ -7,8 +7,8 @@ def main(csvFile):
     content = reader(csvFile)
     #print(content)
 
-    (dist,distStats) = distByAgeAndGender(content)
-    print(distStats)
+    dist = distByAddress(content)
+    print(dist)
 
 
     #print(content)
