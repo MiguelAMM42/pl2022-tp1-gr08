@@ -7,7 +7,7 @@ def main(csvFile):
     content = reader(csvFile)
     #print(content)
 
-    (dist,distStats) = distByYearAndSport(content)
+    (dist,distStats) = distByAgeAndGender(content)
     print(distStats)
 
 

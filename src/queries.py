@@ -98,19 +98,35 @@ def distByYearAndSport(athletes):
 #(d) Distribuição por idade e género (para a idade, considerar apenas 2 escalões: < 35 anos e >= 35)
 def distByAgeAndGender(athletes):
     dist = {'menor35':{'F':[], 'M':[]}, 'maiorIgual35':{'F':[], 'M':[]}}
+    distStats = {}
+    womenCounter = 0
+    menCounter = 0
     for a in athletes:
         if int(a['idade']) < 35:
             if a['genero'] == 'F':
                 dist['menor35']['F'].append(a)
+                distStats['menor35']['F'] = distStats['menor35']['F'] + 1
+                womenCounter = womenCounter + 1
             else:
                 dist['menor35']['M'].append(a)
+                distStats['menor35']['M'] = distStats['menor35']['M'] + 1
+                menCounter = menCounter + 1
         else:
             if a['genero'] == 'F':
                 dist['maiorIgual35']['F'].append(a)
+                distStats['maiorIgual35']['F'] = distStats['maiorIgual35']['F'] + 1
+                womenCounter = womenCounter + 1
             else:
                 dist['maiorIgual35']['M'].append(a)
+                distStats['maiorIgual35']['M'] = distStats['maiorIgual35']['M'] + 1
+                menCounter = menCounter + 1
 
-    return dist
+    distStats['menor35']['F'] = distStats['menor35']['F'] * 100 / (distStats['menor35']['F'] + distStats['menor35']['M'])
+    distStats['menor35']['M'] = 100 - distStats['menor35']['F']
+    distStats['maiorIgual35']['F'] = distStats['maiorIgual35']['F'] * 100 / (distStats['maiorIgual35']['F'] + distStats['maiorIgual35']['M'])
+    distStats['maiorIgual35']['M'] = 100 - distStats['maiorIgual35']['F']
+
+    return (dist,distStats)
 
 
 #(e) Distribuição por morada
