@@ -177,15 +177,24 @@ def distByAgeAndGenderSorted(dist):
 #sorted por morada e nome
 def distByAddress(athletes):
     dist = {}
+    distStats = {}
+    total = 0
     for a in athletes:
         if a['morada'] in dist:
             dist[a['morada']].append(a)
+            distStats[a['morada']] = distStats[a['morada']] + 1
+            total = total + 1
         else:
             dist[a['morada']] = [a]
+            distStats[a['morada']] = 1
+            total = total + 1
+
+    for morada in distStats:
+        distStats[morada] = distStats[morada] * 100 / total
         
     dist = distByAdressSorted(dist)
 
-    return dist
+    return (dist,distStats)
 
 def distByAdressSorted(dist):
     sorted_key_tuple = sorted(dist.items())
@@ -201,6 +210,7 @@ def distByAdressSorted(dist):
 #(f) Distribuição por estatuto de federado em cada ano
 def distByYearAndFederated(athletes):
     dist = {}
+    distStats = {}
     for a in athletes:
         dataEMD = re.search(r'(\d{4})\-\d{2}\-\d{2}', a['dataEMD'])
         year = dataEMD.group(1)
@@ -208,17 +218,25 @@ def distByYearAndFederated(athletes):
         if year in dist:
             if federated in dist[year]:
                 dist[year][federated].append(a)
+                distStats[year][federated] = distStats[year][federated] + 1
             else:
                 dist[year][federated] = [a]
+                distStats[year][federated] = 1
         else:
             dist.update({year:{federated:[a]}})
+            distStats.update({year:{federated:1}})
 
-    return dist
+    for year in distStats:
+        distStats[year]['true'] = distStats[year]['true'] * 100 / (distStats[year]['true'] + distStats[year]['false'])
+        distStats[year]['false'] = 100 - distStats[year]['true']
+
+    return (dist,distStats)
 
 
 #(g) Percentagem de aptos e não aptos por ano
 def distByYearAndSuitable(athletes):
     dist = {}
+    distStats = {}
     for a in athletes:
         dataEMD = re.search(r'(\d{4})\-\d{2}\-\d{2}', a['dataEMD'])
         year = dataEMD.group(1)
@@ -226,9 +244,16 @@ def distByYearAndSuitable(athletes):
         if year in dist:
             if suitable in dist[year]:
                 dist[year][suitable].append(a)
+                distStats[year][suitable] = distStats[year][suitable] + 1
             else:
                 dist[year][suitable] = [a]
+                distStats[year][suitable] = 1
         else:
             dist.update({year:{suitable:[a]}})
+            distStats.update({year:{suitable:1}})
 
-    return dist
+    for year in distStats:
+        distStats[year]['true'] = distStats[year]['true'] * 100 / (distStats[year]['true'] + distStats[year]['false'])
+        distStats[year]['false'] = 100 - distStats[year]['true']
+
+    return (dist, distStats)
