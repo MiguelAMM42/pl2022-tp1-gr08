@@ -75,7 +75,7 @@ def distByDatesHTML(dist):
     f.close()
 
 #(b) Distribuição por género em cada ano e no total --- HTML
-def distByYearAndGenderHTML(dist):
+def distByYearAndGenderHTML(dist,distStats):
     #Code to generate a folder for each year
     for year in dist.keys():
         yearPath = '../out/queryB/' + year
@@ -137,7 +137,7 @@ def distByYearAndGenderHTML(dist):
 
 
 #(c) Distribuição por modalidade em cada ano e no total --- HTML
-def distByYearAndSportHTML(dist):
+def distByYearAndSportHTML(dist,distStats):
     #Code to generate a folder for each year
     for year in dist.keys():
         yearPath = '../out/queryC/' + year
@@ -190,7 +190,7 @@ def distByYearAndSportHTML(dist):
 
 
 #(d) Distribuição por idade e género (para a idade, considerar apenas 2 escalões: < 35 anos e >= 35) --- HTML
-def distByAgeAndGenderHTML(dist):
+def distByAgeAndGenderHTML(dist,distStats):
     #Code to generate a folder for each age interval
     for age in dist.keys():
         agePath = '../out/queryD/' + age
@@ -392,14 +392,14 @@ def HTMLsGenerator(athletes):
     distA = distByDates(athletes)
     distByDatesHTML(distA)
     #b
-    distB = distByYearAndGender(athletes)
-    distByYearAndGenderHTML(distB)
+    distB,distStatsB = distByYearAndGender(athletes)
+    distByYearAndGenderHTML(distB,distStatsB)
     #c
-    distC = distByYearAndSport(athletes)
-    distByYearAndSportHTML(distC)
+    distC, distStatsC = distByYearAndSport(athletes)
+    distByYearAndSportHTML(distC,distStatsC)
     #d
-    distD = distByAgeAndGender(athletes)
-    distByAgeAndGenderHTML(distD)
+    distD,distStatsD = distByAgeAndGender(athletes)
+    distByAgeAndGenderHTML(distD,distStatsD)
     #e
     distE = distByAddress(athletes)
     distByAddressHTML(distE)
