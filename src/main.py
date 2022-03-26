@@ -1,15 +1,14 @@
 import sys
 from reader import reader
 from queries import *
-from athletesGenerator import *
 from htmlGenerator import *
 
 def main(csvFile):
     content = reader(csvFile)
     #print(content)
 
-    dist = distByYearAndSport(content)
-    print(dist)
+    (dist,distStats) = distByYearAndSport(content)
+    print(distStats)
 
 
     #print(content)
