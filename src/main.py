@@ -6,7 +6,7 @@ from htmlGenerator import *
 def main(csvFile):
     athletes = reader(csvFile)
     #HTMLsGenerator(athletes)
-    dist = distByAddress(athletes)
+    dist = distByDates(athletes)
     print(dist)
     
     
