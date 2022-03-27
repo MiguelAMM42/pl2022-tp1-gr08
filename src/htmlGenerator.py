@@ -140,7 +140,7 @@ def distByYearAndGenderHTML(dist,distStats):
                     para = p(__pretty=False)
                     with para:
                         li(a(genderText, href='../%s/%s.html' % (year,genderTitle) ))
-                        percentage = " |--> " + str(round(distStats[year][gender])) + " %"
+                        percentage = " |--> " + str(round(distStats[year][gender],2)) + " %"
                         text(percentage)
 
         f = open("../out/queryB/%s/%s.html" % (year,year), "w")
@@ -157,7 +157,7 @@ def distByYearAndGenderHTML(dist,distStats):
                 para = p(__pretty=False)
                 with para:
                     li(a(year, href='../queryB/%s/%s.html' % (year,year)))
-                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    percentage = " |--> " + str(round(distStats['total-year'][year],2)) + " %"
                     text(percentage)
 
             para = p(__pretty=False)
@@ -171,7 +171,7 @@ def distByYearAndGenderHTML(dist,distStats):
                         genderText = "Genero feminimo"
                     else:
                         genderText = "Genero masculino"
-                    percentage = "> " + genderText + ": " + str(round(distStats['total-gender'][gender])) + " %"
+                    percentage = "> " + genderText + ": " + str(round(distStats['total-gender'][gender],2)) + " %"
                     text(percentage)
 
             
@@ -219,7 +219,7 @@ def distByYearAndSportHTML(dist,distStats):
                     para = p(__pretty=False)
                     with para:
                         li(a(sport, href='../%s/%s.html' % (year,sport) ))
-                        percentage = " |--> " + str(round(distStats[year][sport])) + " %"
+                        percentage = " |--> " + str(round(distStats[year][sport],2)) + " %"
                         text(percentage)
 
         f = open("../out/queryC/%s/%s.html" % (year,year), "w")
@@ -236,7 +236,7 @@ def distByYearAndSportHTML(dist,distStats):
                 para = p(__pretty=False)
                 with para:
                     li(a(year, href='../queryC/%s/%s.html' % (year,year)))
-                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    percentage = " |--> " + str(round(distStats['total-year'][year],2)) + " %"
                     text(percentage)
 
             para = p(__pretty=False)
@@ -247,7 +247,7 @@ def distByYearAndSportHTML(dist,distStats):
                 para = p(__pretty=False)
                 with para:
                     sportText = sport
-                    percentage = "> " + sportText + ": " + str(round(distStats['total-sport'][sport])) + " %"
+                    percentage = "> " + sportText + ": " + str(round(distStats['total-sport'][sport],2)) + " %"
                     text(percentage)
 
 
@@ -306,7 +306,7 @@ def distByAgeAndGenderHTML(dist,distStats):
                     para = p(__pretty=False)
                     with para:
                         li(a(genderText, href='../%s/%s.html' % (age,gender) ))
-                        percentage = " |--> " + str(round(distStats[age][gender])) + " %"
+                        percentage = " |--> " + str(round(distStats[age][gender],2)) + " %"
                         text(percentage)
 
         f = open("../out/queryD/%s/%s.html" % (age,age), "w")
@@ -344,7 +344,7 @@ def distByAgeAndGenderHTML(dist,distStats):
                         genderText = "Genero feminimo"
                     else:
                         genderText = "Genero masculino"
-                    percentage = "> " + genderText + ": " + str(round(distStats['total'][gender])) + " %"
+                    percentage = "> " + genderText + ": " + str(round(distStats['total'][gender],2)) + " %"
                     text(percentage)
 
     f = open("../out/queryD/queryD.html", "w")
@@ -432,7 +432,7 @@ def distByYearAndFederatedHTML(dist,distStats):
                     else:
                         federatedText = "Nao federados"
                     li(a(federatedText, href='../%s/%s.html' % (year,federated) ))
-                    percentage = " |--> " + str(round(distStats[year][federated])) + " %"
+                    percentage = " |--> " + str(round(distStats[year][federated],2)) + " %"
                     text(percentage)
 
         f = open("../out/queryF/%s/%s.html" % (year,year), "w")
@@ -450,7 +450,7 @@ def distByYearAndFederatedHTML(dist,distStats):
                 para = p(__pretty=False)
                 with para:
                     li(a(year, href='../queryF/%s/%s.html' % (year,year)))
-                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    percentage = " |--> " + str(round(distStats['total-year'][year],2)) + " %"
                     text(percentage)
 
             para = p(__pretty=False)
@@ -464,7 +464,7 @@ def distByYearAndFederatedHTML(dist,distStats):
                         federatedText = "Federados"
                     else:
                         federatedText = "Nao federados"
-                    percentage = "> " + federatedText + ": " + str(round(distStats['total'][federated])) + " %"
+                    percentage = "> " + federatedText + ": " + str(round(distStats['total'][federated],2)) + " %"
                     text(percentage)
 
     f = open("../out/queryF/queryF.html", "w")
@@ -511,7 +511,7 @@ def distByYearAndSuitableHTML(dist,distStats):
                     else:
                         suitableText = "Nao aptos"
                     li(a(suitableText, href='../%s/%s.html' % (year,suitable) ))
-                    percentage = " |--> " + str(round(distStats[year][suitable])) + " %"
+                    percentage = " |--> " + str(round(distStats[year][suitable],2)) + " %"
                     text(percentage)
 
         f = open("../out/queryG/%s/%s.html" % (year,year), "w")
@@ -528,7 +528,7 @@ def distByYearAndSuitableHTML(dist,distStats):
                 para = p(__pretty=False)
                 with para:
                     li(a(year, href='../queryG/%s/%s.html' % (year,year)))
-                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    percentage = " |--> " + str(round(distStats['total-year'][year],2)) + " %"
                     text(percentage)
 
             para = p(__pretty=False)
@@ -542,7 +542,7 @@ def distByYearAndSuitableHTML(dist,distStats):
                         suitableText = "Aptos"
                     else:
                         suitableText = "Nao aptos"
-                    percentage = "> " + suitableText + ": " + str(round(distStats['total'][suitable])) + " %"
+                    percentage = "> " + suitableText + ": " + str(round(distStats['total'][suitable],2)) + " %"
                     text(percentage)
 
     f = open("../out/queryG/queryG.html", "w")
