@@ -1,11 +1,6 @@
 import re
 
 
-#FALTA ADICIONAR ESTATISTICAS
-#DESTE MODO AS FUNÇOES IRÃO RETORNAR TUPLOS
-
-
-
 #(a) Datas externas dos registos no dataset
 #sorted por date e por nome
 def distByDates(athletes):
@@ -244,7 +239,6 @@ def distByAdressSorted(dist):
     
     for adress in sorted_dist:
         sorted_dist[adress] = sorted(sorted_dist[adress], key = lambda i: i['nome_primeiro'])
-        #print(sorted(sorted_dist[adress], key = lambda i: i['index']))
     return sorted_dist
     
 
