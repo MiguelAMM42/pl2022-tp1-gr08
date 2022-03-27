@@ -18,7 +18,7 @@ def reader(fileName):
             param = param.replace("/","_")
         dic[param] = []
 
-    parser = r'(?P<_id>[A-Za-z0-9_À-ÿ]{24}),(?P<index>\d+),(?P<dataEMD>\d{4}-\d{2}-\d{2}),(?P<nome_primeiro>[A-Za-zÀ-ÿ]+),(?P<nome_ultimo>[A-Za-zÀ-ÿ]+),(?P<idade>\d+),(?P<genero>[Ff]|[Mm]),(?P<morada>[A-Za-zÀ-ÿ]+),(?P<modalidade>[A-Za-zÀ-ÿ]+),(?P<clube>[A-Za-zÀ-ÿ]+),(?P<email>[A-Za-z0-9_À-ÿ]+\.[A-Za-z0-9_À-ÿ]+@[A-Za-z0-9_À-ÿ]+\.([A-Za-z0-9_À-ÿ]+\.)*[A-Za-z0-9_À-ÿ]+),(?P<federado>[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]),(?P<resultado>[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])'
+    parser = r'(?P<_id>[A-Za-z0-9_À-ÿ]{24}),(?P<index>\d+),(?P<dataEMD>\d{4}-\d{2}-\d{2}),(?P<nome_primeiro>[A-Za-zÀ-ÿ]+),(?P<nome_ultimo>[A-Za-zÀ-ÿ]+),(?P<idade>\d+),(?P<genero>[Ff]|[Mm]),(?P<morada>[A-Za-zÀ-ÿ]+),(?P<modalidade>[A-Za-zÀ-ÿ]+),(?P<clube>[A-Za-zÀ-ÿ]+),(?P<email>(\w+[\.]?\w+)+@(\w+\-?\w+\.)+(\w+\-?\w+)+),(?P<federado>[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]),(?P<resultado>[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])'
     pparser = re.compile(parser)
 
     dic_keys = list(dic.keys())

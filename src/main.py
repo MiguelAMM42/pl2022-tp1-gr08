@@ -5,11 +5,11 @@ from htmlGenerator import *
 
 def main(csvFile):
     athletes = reader(csvFile)
-    #HTMLsGenerator(athletes)
+    HTMLsGenerator(athletes)
     
-    (dist, distStats) = distByYearAndSuitable(athletes)
-    print(distStats)
-    print(dist)
+    dist,stats = distByAgeAndGender(athletes)
+    #print(distStats)
+    print(stats)
     
     
 

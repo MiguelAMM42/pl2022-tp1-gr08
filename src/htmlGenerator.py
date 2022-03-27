@@ -1,5 +1,6 @@
 import dominate
 from dominate.tags import *
+from dominate.util import text
 from queries import *
 import unicodedata
 import os
@@ -9,10 +10,28 @@ def athletesGenerator(athletes):
     for a in athletes:
         doc = dominate.document(title=a['_id'])
 
+        if a['federado'] == 'true':
+            federado = 'Sim'
+        else:
+            federado = 'Não'
+
+        if a['resultado'] == 'true':
+            resultado = 'Apto'
+        else:
+            resultado = 'Não Apto'
+
+
         with doc:
             with div(id='header').add(ol()):
-                p(a['nome_primeiro'] + ' ' + a['nome_ultimo'])
-                p(a['modalidade'])
+                p('> NOME: ' + a['nome_primeiro'] + ' ' + a['nome_ultimo'])
+                p('> IDADE: ' + a['idade'])
+                p('> GÉNERO: ' + a['genero'])
+                p('> MORADA: ' + a['morada'])
+                p('> MODALIDADE: ' + a['modalidade'])
+                p('> CLUBE: ' + a['clube'])
+                p('> EMAIL: ' + a['email'])
+                p('> FEDERADO: ' + federado)
+                p('> RESULTADO EXAME: ' + resultado)
 
         fileName = "../out/athletes/" + a['_id'] + ".html"
 
@@ -22,7 +41,7 @@ def athletesGenerator(athletes):
 
 
 #Dictionary of queries
-queries_dict = {'A':'Datas extermas dos registos no dataset',
+queries_dict = {'A':'Datas extremas dos registos no dataset',
 'B' : 'Distribuição por género em cada ano e no total',
 'C' : 'Distribuição por modalidade em cada ano e no total',
 'D' : 'Distribuição por idade e género (para a idade, considera apenas 2 escalões: < 35 anos e >= 35)',
@@ -49,26 +68,21 @@ def htmlMAIN():
 
 #(a) Datas externas dos registos no dataset --- HTML
 def distByDatesHTML(dist):
-    #HTML doc for each date
-    for date in dist.keys():
-        doc = dominate.document(title=date)
-
-        with doc:
-            with div(id='header').add(ol()):
-                for athlete in dist[date]:
-                    li(a(athlete['nome_primeiro'] + " " + athlete['nome_ultimo'], href='../../athletes/%s.html' % athlete['_id']))
-
-        f = open("../out/queryA/dates/%s.html" % date, "w")
-        f.write(doc.render())
-        f.close()
     
     #main HTML doc of the query
-    doc = dominate.document(title='Datas externas dos registos no dataset')
+    doc = dominate.document(title='Datas extremas dos registos no dataset')
 
     with doc:
         with div(id='header').add(ol()):
-            for date in dist.keys():
-                li(a(date.title(), href='../queryA/dates/%s.html' % date))
+            para = p(__pretty=False)
+            with para:
+                textOlder = "Data mais antiga: " + dist[0]
+                text(textOlder) 
+            para = p(__pretty=False)
+            with para:
+                textRecent = "Data mais recente: " + dist[1]
+                text(textRecent) 
+
 
     f = open("../out/queryA/queryA.html", "w")
     f.write(doc.render())
@@ -113,9 +127,16 @@ def distByYearAndGenderHTML(dist,distStats):
                 for gender in dist[year].keys():
                     if gender == 'F':
                         genderTitle = 'feminino'
+                        genderText = 'Género feminino'
                     else:
                         genderTitle = 'masculino'
-                    li(a(genderTitle, href='../%s/%s.html' % (year,genderTitle) ))
+                        genderText = 'Género masculino'
+                    
+                    para = p(__pretty=False)
+                    with para:
+                        li(a(genderText, href='../%s/%s.html' % (year,genderTitle) ))
+                        percentage = " |--> " + str(round(distStats[year][gender])) + " %"
+                        text(percentage)
 
         f = open("../out/queryB/%s/%s.html" % (year,year), "w")
         f.write(doc.render())
@@ -128,7 +149,28 @@ def distByYearAndGenderHTML(dist,distStats):
     with doc:
         with div(id='header').add(ol()):
             for year in dist.keys():
-                li(a(year, href='../queryB/%s/%s.html' % (year,year)))
+                para = p(__pretty=False)
+                with para:
+                    li(a(year, href='../queryB/%s/%s.html' % (year,year)))
+                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    text(percentage)
+
+            para = p(__pretty=False)
+            with para:    
+                text('ESTATISTICAS GERAIS:')
+
+            for gender in distStats['total-gender'].keys():
+                para = p(__pretty=False)
+                with para:
+                    if gender == 'F':
+                        genderText = "Genero feminimo"
+                    else:
+                        genderText = "Genero masculino"
+                    percentage = "> " + genderText + ": " + str(round(distStats['total-gender'][gender])) + " %"
+                    text(percentage)
+
+            
+               
 
     f = open("../out/queryB/queryB.html", "w")
     f.write(doc.render())
@@ -169,7 +211,11 @@ def distByYearAndSportHTML(dist,distStats):
         with doc:
             with div(id='header').add(ol()):
                 for sport in dist[year].keys():
-                    li(a(sport, href='../%s/%s.html' % (year,sport) ))
+                    para = p(__pretty=False)
+                    with para:
+                        li(a(sport, href='../%s/%s.html' % (year,sport) ))
+                        percentage = " |--> " + str(round(distStats[year][sport])) + " %"
+                        text(percentage)
 
         f = open("../out/queryC/%s/%s.html" % (year,year), "w")
         f.write(doc.render())
@@ -177,12 +223,28 @@ def distByYearAndSportHTML(dist,distStats):
 
     
     #main HTML doc of the query
-    doc = dominate.document(title='Distribuição por modalidade em cada ano e no total')
+    doc = dominate.document(title='Distribuicao por modalidade em cada ano e no total')
 
     with doc:
         with div(id='header').add(ol()):
             for year in dist.keys():
-                li(a(year, href='../queryC/%s/%s.html' % (year,year)))
+                para = p(__pretty=False)
+                with para:
+                    li(a(year, href='../queryC/%s/%s.html' % (year,year)))
+                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    text(percentage)
+
+            para = p(__pretty=False)
+            with para:    
+                text('ESTATISTICAS GERAIS:')
+
+            for sport in distStats['total-sport'].keys():
+                para = p(__pretty=False)
+                with para:
+                    sportText = sport
+                    percentage = "> " + sportText + ": " + str(round(distStats['total-sport'][sport])) + " %"
+                    text(percentage)
+
 
     f = open("../out/queryC/queryC.html", "w")
     f.write(doc.render())
@@ -201,6 +263,12 @@ def distByAgeAndGenderHTML(dist,distStats):
     #Code to generate HTML doc for each gender in each age interval
     for age in dist.keys():
         for gender in dist[age].keys():
+            if gender == 'F':
+                genderTitle = 'feminino'
+                genderText = 'Género feminino'
+            else:
+                genderTitle = 'masculino'
+                genderText = 'Género masculino'
             doc = dominate.document(title=gender)
 
             with doc:
@@ -214,15 +282,27 @@ def distByAgeAndGenderHTML(dist,distStats):
             
         
 
-    #Code to generate HTML doc for each year
+    #Code to generate HTML doc for each age
     for age in dist.keys():
+    
 
         doc = dominate.document(title=age)
 
         with doc:
             with div(id='header').add(ol()):
                 for gender in dist[age].keys():
-                    li(a(gender, href='../%s/%s.html' % (age,gender) ))
+                    if gender == 'F':
+                        genderTitle = 'feminino'
+                        genderText = 'Género feminino'
+                    else:
+                        genderTitle = 'masculino'
+                        genderText = 'Género masculino'
+                    
+                    para = p(__pretty=False)
+                    with para:
+                        li(a(genderText, href='../%s/%s.html' % (age,gender) ))
+                        percentage = " |--> " + str(round(distStats[age][gender])) + " %"
+                        text(percentage)
 
         f = open("../out/queryD/%s/%s.html" % (age,age), "w")
         f.write(doc.render())
@@ -234,8 +314,33 @@ def distByAgeAndGenderHTML(dist,distStats):
 
     with doc:
         with div(id='header').add(ol()):
-            for year in dist.keys():
-                li(a(year, href='../queryD/%s/%s.html' % (year,year)))
+            for age in dist.keys():
+                if age == 'menor35':
+                    ageTitle = '<35'
+                    ageText = 'Idade < 35'
+                else:
+                    ageTitle = '>=35'
+                    ageText = 'Idade >= 35'    
+
+                para = p(__pretty=False)
+                with para:
+                    li(a(ageText, href='../queryD/%s/%s.html' % (age,age)))
+                    percentage = " |--> " + str(round(distStats['total-age'][age],2)) + " %"
+                    text(percentage)
+
+            para = p(__pretty=False)
+            with para:    
+                text('ESTATISTICAS GERAIS:')
+
+            for gender in distStats['total'].keys():
+                para = p(__pretty=False)
+                with para:
+                    if gender == 'F':
+                        genderText = "Genero feminimo"
+                    else:
+                        genderText = "Genero masculino"
+                    percentage = "> " + genderText + ": " + str(round(distStats['total'][gender])) + " %"
+                    text(percentage)
 
     f = open("../out/queryD/queryD.html", "w")
     f.write(doc.render())
@@ -243,7 +348,7 @@ def distByAgeAndGenderHTML(dist,distStats):
 
 
 #(e) Distribuição por morada --- HTML
-def distByAddressHTML(dist):
+def distByAddressHTML(dist,distStats):
     #Code to generate a folder dor the addresses
     addrPath = '../out/queryE/addresses'
     if not os.path.exists(addrPath):
@@ -270,7 +375,11 @@ def distByAddressHTML(dist):
     with doc:
         with div(id='header').add(ol()):
             for addr in dist.keys():
-                li(a(addr.title(), href='../queryE/addresses/%s.html' % addr))
+                para = p(__pretty=False)
+                with para:
+                    li(a(addr.title(), href='../queryE/addresses/%s.html' % addr))
+                    percentage = " |--> " + str(round(distStats[addr],2)) + " %"
+                    text(percentage)
 
     f = open("../out/queryE/queryE.html", "w")
     f.write(doc.render())
@@ -278,7 +387,7 @@ def distByAddressHTML(dist):
 
 
 #(f) Distribuição por estatuto de federado em cada ano --- HTML
-def distByYearAndFederatedHTML(dist):
+def distByYearAndFederatedHTML(dist,distStats):
     #Code to generate a folder for each year
     for year in dist.keys():
         yearPath = '../out/queryF/' + year
@@ -295,6 +404,8 @@ def distByYearAndFederatedHTML(dist):
                 with div(id='header').add(ol()):
                     for athlete in dist[year][federated]:
                         li(a(athlete['nome_primeiro'] + " " + athlete['nome_ultimo'], href='../../athletes/%s.html' % athlete['_id']))
+                        
+
 
             f = open("../out/queryF/%s/%s.html" % (year, federated), "w")
             f.write(doc.render())
@@ -305,12 +416,19 @@ def distByYearAndFederatedHTML(dist):
     #Code to generate HTML doc for each year
     for year in dist.keys():
 
+
         doc = dominate.document(title=year)
 
         with doc:
             with div(id='header').add(ol()):
                 for federated in dist[year].keys():
-                    li(a(federated, href='../%s/%s.html' % (year,federated) ))
+                    if federated == 'true':
+                        federatedText = "Federados"
+                    else:
+                        federatedText = "Nao federados"
+                    li(a(federatedText, href='../%s/%s.html' % (year,federated) ))
+                    percentage = " |--> " + str(round(distStats[year][federated])) + " %"
+                    text(percentage)
 
         f = open("../out/queryF/%s/%s.html" % (year,year), "w")
         f.write(doc.render())
@@ -320,10 +438,29 @@ def distByYearAndFederatedHTML(dist):
     #main HTML doc of the query
     doc = dominate.document(title='Distribuição por estatuto de federado em cada ano')
 
+
     with doc:
         with div(id='header').add(ol()):
             for year in dist.keys():
-                li(a(year, href='../queryF/%s/%s.html' % (year,year)))
+                para = p(__pretty=False)
+                with para:
+                    li(a(year, href='../queryF/%s/%s.html' % (year,year)))
+                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    text(percentage)
+
+            para = p(__pretty=False)
+            with para:    
+                text('ESTATISTICAS GERAIS:')
+
+            for federated in distStats['total'].keys():
+                para = p(__pretty=False)
+                with para:
+                    if federated == 'true':
+                        federatedText = "Federados"
+                    else:
+                        federatedText = "Nao federados"
+                    percentage = "> " + federatedText + ": " + str(round(distStats['total'][federated])) + " %"
+                    text(percentage)
 
     f = open("../out/queryF/queryF.html", "w")
     f.write(doc.render())
@@ -332,7 +469,7 @@ def distByYearAndFederatedHTML(dist):
 
 
 #(g) Percentagem de aptos e não aptos por ano --- HTML
-def distByYearAndSuitableHTML(dist):
+def distByYearAndSuitableHTML(dist,distStats):
     #Code to generate a folder for each year
     for year in dist.keys():
         yearPath = '../out/queryG/' + year
@@ -364,7 +501,13 @@ def distByYearAndSuitableHTML(dist):
         with doc:
             with div(id='header').add(ol()):
                 for suitable in dist[year].keys():
-                    li(a(suitable, href='../%s/%s.html' % (year,suitable) ))
+                    if suitable == 'true':
+                        suitableText = "Aptos"
+                    else:
+                        suitableText = "Nao aptos"
+                    li(a(suitableText, href='../%s/%s.html' % (year,suitable) ))
+                    percentage = " |--> " + str(round(distStats[year][suitable])) + " %"
+                    text(percentage)
 
         f = open("../out/queryG/%s/%s.html" % (year,year), "w")
         f.write(doc.render())
@@ -377,7 +520,25 @@ def distByYearAndSuitableHTML(dist):
     with doc:
         with div(id='header').add(ol()):
             for year in dist.keys():
-                li(a(year, href='../queryG/%s/%s.html' % (year,year)))
+                para = p(__pretty=False)
+                with para:
+                    li(a(year, href='../queryG/%s/%s.html' % (year,year)))
+                    percentage = " |--> " + str(round(distStats['total-year'][year])) + " %"
+                    text(percentage)
+
+            para = p(__pretty=False)
+            with para:    
+                text('ESTATISTICAS GERAIS:')
+
+            for suitable in distStats['total'].keys():
+                para = p(__pretty=False)
+                with para:
+                    if suitable == 'true':
+                        suitableText = "Aptos"
+                    else:
+                        suitableText = "Nao aptos"
+                    percentage = "> " + suitableText + ": " + str(round(distStats['total'][suitable])) + " %"
+                    text(percentage)
 
     f = open("../out/queryG/queryG.html", "w")
     f.write(doc.render())
@@ -401,11 +562,11 @@ def HTMLsGenerator(athletes):
     distD,distStatsD = distByAgeAndGender(athletes)
     distByAgeAndGenderHTML(distD,distStatsD)
     #e
-    distE = distByAddress(athletes)
-    distByAddressHTML(distE)
+    distE,distStatsE = distByAddress(athletes)
+    distByAddressHTML(distE,distStatsE)
     #f
-    distF = distByYearAndFederated(athletes)
-    distByYearAndFederatedHTML(distF)
+    distF,distStatsF = distByYearAndFederated(athletes)
+    distByYearAndFederatedHTML(distF,distStatsF)
     #g
-    distG = distByYearAndSuitable(athletes)
-    distByYearAndSuitableHTML(distG)
+    distG,distStatsG = distByYearAndSuitable(athletes)
+    distByYearAndSuitableHTML(distG,distStatsG)
