@@ -20,12 +20,17 @@ def athletesGenerator(athletes):
         else:
             resultado = 'Não Apto'
 
+        if a['genero'] == 'M':
+            genero = 'Masculino'
+        else:
+            genero = 'Feminino'
+
 
         with doc:
             with div(id='header').add(ol()):
                 p('> NOME: ' + a['nome_primeiro'] + ' ' + a['nome_ultimo'])
                 p('> IDADE: ' + a['idade'])
-                p('> GÉNERO: ' + a['genero'])
+                p('> GÉNERO: ' + genero)
                 p('> MORADA: ' + a['morada'])
                 p('> MODALIDADE: ' + a['modalidade'])
                 p('> CLUBE: ' + a['clube'])
