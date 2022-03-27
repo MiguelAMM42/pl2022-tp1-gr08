@@ -77,11 +77,7 @@ def distByYearAndGender(athletes):
     totaltotal = womenCounter + menCounter
     distStats.update({'total-gender':{'F':womenCounter*100/totaltotal,'M':menCounter*100/totaltotal}})
 
-    print(totaltotal)
-
     for year in distStats['total-year']:
-        print(year)
-        print(distStats['total-year'][year])
         distStats['total-year'][year] = distStats['total-year'][year] * 100 / totaltotal
     
     dist = distByYearAndGenderSorted(dist)
@@ -278,18 +274,12 @@ def distByYearAndFederated(athletes):
             
     dist = distByYearAndFederatedSorted(dist)
 
-    #for year in distStats:
-    #    distStats[year]['true'] = distStats[year]['true'] * 100 / (distStats[year]['true'] + distStats[year]['false'])
-    #    distStats[year]['false'] = 100 - distStats[year]['true']
-
-    totaltotal = 0
     for year in distStats:
         total = 0
         for federated in distStats[year]:
             total = total + distStats[year][federated]
         for federated in distStats[year]:
             distStats[year][federated] = distStats[year][federated] * 100 / total
-        totaltotal = totaltotal + total
 
     return (dist,distStats)
 
@@ -330,18 +320,12 @@ def distByYearAndSuitable(athletes):
         distStats['total'][suitable] = distStats['total'][suitable] + 1
         distStats['total-year'][year] = distStats['total-year'][year] + 1
 
-    #for year in distStats:
-    #    distStats[year]['true'] = distStats[year]['true'] * 100 / (distStats[year]['true'] + distStats[year]['false'])
-    #    distStats[year]['false'] = 100 - distStats[year]['true']
-
-    totaltotal = 0
     for year in distStats:
         total = 0
         for suitable in distStats[year]:
             total = total + distStats[year][suitable]
         for suitable in distStats[year]:
             distStats[year][suitable] = distStats[year][suitable] * 100 / total
-        totaltotal = totaltotal + total
 
     dist = distByYearAndSuitableSorted(dist)
 
