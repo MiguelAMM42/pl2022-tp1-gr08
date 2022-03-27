@@ -8,8 +8,6 @@ def main(csvFile):
     HTMLsGenerator(athletes)
     
     dist,stats = distByAgeAndGender(athletes)
-    #print(distStats)
-    print(stats)
     
     
 
